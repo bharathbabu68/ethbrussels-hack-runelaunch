@@ -76,20 +76,21 @@ function Launches() {
     maxWidth: '1200px', // Increased maxWidth for wider display
     width: '100%',
     marginTop: '20px',
+    marginBottom:"30px"
   };
 
   const titleContainerStyle = {
-    textAlign: 'center',
-    marginBottom: '20px',
+    textAlign: 'left',
+    marginBottom: '5px',
   };
 
   const titleStyle = {
     fontSize: '48px',
     fontWeight: 'bold',
     color: 'black',
-    backgroundColor: 'white',
+    backgroundColor: 'orangered',
     display: 'inline-block',
-    padding: '10px 20px',
+    padding: '5px 5px',
   };
 
   const gridContainerStyle = {
@@ -172,10 +173,10 @@ function Launches() {
 
   const CreateButtonStyle = {
     fontSize: '20px',
-    backgroundColor: 'limegreen',
-    color: 'black',
+    backgroundColor: '#9E76FF',
+    color: 'white',
     padding: '10px 20px',
-    border: '2px solid limegreen',
+    border: '2px solid #9E76FF',
     cursor: 'pointer',
     marginTop: '10px',
     marginLeft:"80%"

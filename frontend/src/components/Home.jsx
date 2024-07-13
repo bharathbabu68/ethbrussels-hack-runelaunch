@@ -33,7 +33,7 @@ function Home() {
 
   const subTitleStyle = {
     fontSize: '40px',
-    backgroundColor: 'limegreen',
+    backgroundColor: '#9E76FF',
     display: 'inline-block',
     padding: '10px',
     margin: '5px',
@@ -112,8 +112,8 @@ function Home() {
 
   const buttonStyle = {
     fontSize: '32px',
-    backgroundColor: 'black',
-    color: 'white',
+    backgroundColor: '#08FFD0',
+    color: 'black',
     padding: '10px 20px',
     border: '2px solid white',
     cursor: 'pointer',
@@ -141,7 +141,7 @@ function Home() {
           </div>
           <div style={cardStyle}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={cardTitleStyle('deepskyblue')}>LIST ON LAUNCHPAD</h3>
+              <h3 style={cardTitleStyle('#9E76FF')}>LIST ON LAUNCHPAD</h3>
               <span style={cardNumberStyle}>2</span>
             </div>
             <p>

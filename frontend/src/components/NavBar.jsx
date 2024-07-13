@@ -11,7 +11,7 @@ function NavBar() {
   };
 
   const logoStyle = {
-    fontSize: '24px',
+    fontSize: '30px',
     fontWeight: 'bold',
     color: 'black',
     backgroundColor: 'orange',
