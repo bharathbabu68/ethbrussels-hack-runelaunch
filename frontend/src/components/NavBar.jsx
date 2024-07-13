@@ -25,21 +25,20 @@ function NavBar() {
     gap: '20px',
   };
 
-  const navItemStyle = (backgroundColor) => ({
+  const navItemStyle = {
     fontSize: '18px',
-    color: 'black',
-    backgroundColor: backgroundColor,
+    color: 'white', // Set all text to white
     cursor: 'pointer',
     padding: '10px 20px',
-    transition: 'background-color 0.3s',
-  });
+    transition: 'color 0.3s', // Smooth color transition
+  };
 
   const navItems = [
-    { name: 'Create Rune', color: 'gold', link: 'http://localhost:3000/runes' },
-    { name: 'Launches', color: 'limegreen', link: 'http://localhost:3001/launches' },
-    { name: 'Holdings', color: 'deepskyblue', link: 'http://localhost:3001//holdings' },
-    { name: 'Governance', color: 'orange', link: 'http://localhost:3001//governance' },
-    { name: 'About', color: 'magenta', link: 'http://localhost:3001//about' },
+    { name: 'Launches', link: 'http://localhost:3001/launches' },
+    { name: 'Create Rune', link: 'http://localhost:3000/runes' },
+    { name: 'Holdings', link: 'http://localhost:3001/holdings' },
+    { name: 'Governance', link: 'http://localhost:3001/governance' },
+    { name: 'About', link: 'http://localhost:3001/about' },
   ];
 
   const handleNavClick = (link) => {
@@ -55,14 +54,14 @@ function NavBar() {
         {navItems.map((item, index) => (
           <div
             key={index}
-            style={navItemStyle(item.color)}
+            style={navItemStyle}
             onMouseOver={(e) => {
-              e.target.style.backgroundColor = 'white';
-              e.target.style.color = item.color;
+              e.target.style.color = 'black'; // Change text color on hover
+              e.target.style.backgroundColor = 'white'; // Background color on hover
             }}
             onMouseOut={(e) => {
-              e.target.style.backgroundColor = item.color;
-              e.target.style.color = 'black';
+              e.target.style.color = 'white'; // Restore text color on mouse out
+              e.target.style.backgroundColor = 'transparent'; // Remove background color on mouse out
             }}
             onClick={() => handleNavClick(item.link)}
           >

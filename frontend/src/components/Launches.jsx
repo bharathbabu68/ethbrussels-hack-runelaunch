@@ -167,12 +167,27 @@ function Launches() {
     padding: '10px 20px',
     border: '2px solid white',
     cursor: 'pointer',
+    marginTop: '10px'
+  };
+
+  const CreateButtonStyle = {
+    fontSize: '20px',
+    backgroundColor: 'limegreen',
+    color: 'black',
+    padding: '10px 20px',
+    border: '2px solid limegreen',
+    cursor: 'pointer',
     marginTop: '10px',
+    marginLeft:"80%"
   };
 
   const handleContractLinkClick = (contractAddress) => {
     const blockExplorerUrl = `https://explorer.testnet.rootstock.io/address/${contractAddress}`;
     window.open(blockExplorerUrl, '_blank');
+  };
+
+  const handleCreateNewLaunch = () => {
+    window.location.href='/create-new-launch'
   };
 
   return (
@@ -183,6 +198,9 @@ function Launches() {
           <div style={titleContainerStyle}>
             <h1 style={titleStyle}>Active Launches</h1>
           </div>
+          <button style={CreateButtonStyle} onClick={handleCreateNewLaunch}>
+            Create New Launch
+          </button>
           <div style={gridContainerStyle}>
             {launches.map((launch, index) => {
               const percentageClaimed = (launch.tokensClaimed / launch.totalTokens) * 100;
