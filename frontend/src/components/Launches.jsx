@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import NavBar from './NavBar';
 
 function Launches() {
   const [launches, setLaunches] = useState([]);
@@ -104,6 +105,8 @@ function Launches() {
   };
 
   return (
+    <>
+    <NavBar/>
     <div style={containerStyle}>
       <section style={sectionStyle}>
         <div style={titleContainerStyle}>
@@ -126,6 +129,7 @@ function Launches() {
         ))}
       </section>
     </div>
+    </>
   );
 }
 

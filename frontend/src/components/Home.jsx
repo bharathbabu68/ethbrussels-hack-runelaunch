@@ -168,7 +168,7 @@ function Home() {
           </div>
         </div>
         <div style={buttonContainerStyle}>
-          <button style={buttonStyle}>Get Started</button>
+          <button onClick={()=>window.location.href="/launches"} style={buttonStyle}>Get Started</button>
         </div>
       </section>
     </div>
