@@ -26,27 +26,27 @@ function Home() {
     fontSize: '78px',
     fontWeight: 'bold',
     color: 'black',
-    backgroundColor: 'white',
+    backgroundColor: 'orange',
     display: 'inline-block',
     padding: '10px',
   };
 
   const subTitleStyle = {
-    fontSize: '48px',
+    fontSize: '40px',
     backgroundColor: 'limegreen',
     display: 'inline-block',
     padding: '10px',
     margin: '5px',
-    marginBottom: '0px',
+    marginBottom: '15px',
   };
 
   const subTitle2Style = {
-    fontSize: '48px',
-    backgroundColor: 'deepskyblue',
+    fontSize: '40px',
+    backgroundColor: 'orangered',
     display: 'inline-block',
     padding: '10px',
     margin: '5px',
-    marginBottom: '0px',
+    marginBottom: '15px',
   };
 
   const subTitle3Style = {

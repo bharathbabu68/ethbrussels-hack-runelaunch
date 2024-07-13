@@ -14,7 +14,7 @@ function NavBar() {
     fontSize: '24px',
     fontWeight: 'bold',
     color: 'black',
-    backgroundColor: 'white',
+    backgroundColor: 'orange',
     padding: '5px 10px',
     cursor: 'pointer',
     textDecoration: 'none', // Ensure no underline on the logo link
@@ -34,24 +34,22 @@ function NavBar() {
     transition: 'background-color 0.3s',
   });
 
-  const navItemHoverStyle = (backgroundColor) => ({
-    ...navItemStyle(backgroundColor),
-    color: 'white',
-    border: '2px solid white',
-  });
-
   const navItems = [
-    { name: 'Launches', color: 'limegreen' },
-    { name: 'Holdings', color: 'deepskyblue' },
-    { name: 'Staking', color: 'gold' },
-    { name: 'Governance', color: 'orange' },
-    { name: 'About', color: 'magenta' },
+    { name: 'Create Rune', color: 'gold', link: 'http://localhost:3000/runes' },
+    { name: 'Launches', color: 'limegreen', link: 'http://localhost:3001/launches' },
+    { name: 'Holdings', color: 'deepskyblue', link: 'http://localhost:3001//holdings' },
+    { name: 'Governance', color: 'orange', link: 'http://localhost:3001//governance' },
+    { name: 'About', color: 'magenta', link: 'http://localhost:3001//about' },
   ];
+
+  const handleNavClick = (link) => {
+    window.location.replace(link);
+  };
 
   return (
     <nav style={navbarStyle}>
       <a href="/" style={logoStyle}>
-        Runelaunch
+        RuneLaunch
       </a>
       <div style={navItemsStyle}>
         {navItems.map((item, index) => (
@@ -66,6 +64,7 @@ function NavBar() {
               e.target.style.backgroundColor = item.color;
               e.target.style.color = 'black';
             }}
+            onClick={() => handleNavClick(item.link)}
           >
             {item.name}
           </div>

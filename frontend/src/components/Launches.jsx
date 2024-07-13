@@ -5,25 +5,55 @@ function Launches() {
   const [launches, setLaunches] = useState([]);
 
   useEffect(() => {
-    
     const fetchData = async () => {
-
       const data = [
         {
           name: 'Token1',
           symbol: 'TKN1',
           description: 'Description for Token1',
           tokensAvailable: 100000,
+          tokensClaimed: 50000,
+          totalTokens: 150000,
           deadline: '2024-12-31',
           costPerToken: 0.01,
+          participants: 1200,
+          contractAddress: '0xb4711efc038b485b1a909b20a9cb02024b6ee402', // Example contract address
         },
         {
           name: 'Token2',
           symbol: 'TKN2',
           description: 'Description for Token2',
           tokensAvailable: 500000,
+          tokensClaimed: 250000,
+          totalTokens: 1000000,
           deadline: '2024-11-30',
           costPerToken: 0.05,
+          participants: 850,
+          contractAddress: '0xb4711efc038b485b1a909b20a9cb02024b6ee403', // Example contract address
+        },
+        {
+          name: 'Token3',
+          symbol: 'TKN3',
+          description: 'Description for Token3',
+          tokensAvailable: 750000,
+          tokensClaimed: 400000,
+          totalTokens: 1150000,
+          deadline: '2024-10-15',
+          costPerToken: 0.03,
+          participants: 1100,
+          contractAddress: '0xb4711efc038b485b1a909b20a9cb02024b6ee404', // Example contract address
+        },
+        {
+          name: 'Token4',
+          symbol: 'TKN4',
+          description: 'Description for Token4',
+          tokensAvailable: 750000,
+          tokensClaimed: 400000,
+          totalTokens: 1150000,
+          deadline: '2024-10-15',
+          costPerToken: 0.03,
+          participants: 1100,
+          contractAddress: '0xb4711efc038b485b1a909b20a9cb02024b6ee405', // Example contract address
         },
       ];
       setLaunches(data);
@@ -43,9 +73,9 @@ function Launches() {
   };
 
   const sectionStyle = {
-    maxWidth: '900px',
-    marginTop: '20px',
+    maxWidth: '1200px', // Increased maxWidth for wider display
     width: '100%',
+    marginTop: '20px',
   };
 
   const titleContainerStyle = {
@@ -62,8 +92,11 @@ function Launches() {
     padding: '10px 20px',
   };
 
-  const cardContainerStyle = {
-    marginBottom: '20px',
+  const gridContainerStyle = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', // Adjusted for three cards per row
+    gap: '20px',
+    marginTop: '20px',
   };
 
   const cardStyle = {
@@ -72,7 +105,14 @@ function Launches() {
     padding: '20px',
     backgroundColor: 'black',
     color: 'white',
-    marginBottom: '20px',
+    textAlign: 'left',
+  };
+
+  const cardHeaderStyle = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '10px',
   };
 
   const cardTitleStyle = (backgroundColor) => ({
@@ -88,11 +128,37 @@ function Launches() {
     fontSize: '18px',
     padding: '5px 10px',
     color: 'white',
+    backgroundColor: 'gray',
+    borderRadius: '5px',
   };
 
   const cardTextStyle = {
-    margin: '10px 0',
+    margin: '5px 0',
   };
+
+  const contractLinkStyle = {
+    fontSize: '14px',
+    color: 'white',
+    textDecoration: 'underline',
+    cursor: 'pointer',
+  };
+
+  const progressBarContainerStyle = {
+    backgroundColor: 'white',
+    borderRadius: '10px',
+    overflow: 'hidden',
+    height: '25px',
+    marginTop: '10px',
+  };
+
+  const progressBarStyle = (percentage) => ({
+    width: `${percentage}%`,
+    backgroundColor: 'limegreen',
+    height: '100%',
+    textAlign: 'center',
+    color: 'black',
+    lineHeight: '25px', // Center the text vertically
+  });
 
   const buttonStyle = {
     fontSize: '16px',
@@ -104,31 +170,55 @@ function Launches() {
     marginTop: '10px',
   };
 
+  const handleContractLinkClick = (contractAddress) => {
+    const blockExplorerUrl = `https://explorer.testnet.rootstock.io/address/${contractAddress}`;
+    window.open(blockExplorerUrl, '_blank');
+  };
+
   return (
     <>
-    <NavBar/>
-    <div style={containerStyle}>
-      <section style={sectionStyle}>
-        <div style={titleContainerStyle}>
-          <h1 style={titleStyle}>Active Launches</h1>
-        </div>
-        {launches.map((launch, index) => (
-          <div key={index} style={cardContainerStyle}>
-            <div style={cardStyle}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={cardTitleStyle('limegreen')}>{launch.name}</h3>
-                <span style={cardSymbolStyle}>{launch.symbol}</span>
-              </div>
-              <p style={cardTextStyle}>{launch.description}</p>
-              <p style={cardTextStyle}>Tokens Available: {launch.tokensAvailable}</p>
-              <p style={cardTextStyle}>Deadline: {launch.deadline}</p>
-              <p style={cardTextStyle}>Cost Per Token: {launch.costPerToken} ETH</p>
-              <button style={buttonStyle}>Claim</button>
-            </div>
+      <NavBar />
+      <div style={containerStyle}>
+        <section style={sectionStyle}>
+          <div style={titleContainerStyle}>
+            <h1 style={titleStyle}>Active Launches</h1>
           </div>
-        ))}
-      </section>
-    </div>
+          <div style={gridContainerStyle}>
+            {launches.map((launch, index) => {
+              const percentageClaimed = (launch.tokensClaimed / launch.totalTokens) * 100;
+              return (
+                <div key={index} style={cardStyle}>
+                  <div style={cardHeaderStyle}>
+                    <h3 style={cardTitleStyle('blue')}>{launch.name}</h3>
+                    <span style={cardSymbolStyle}>{launch.symbol}</span>
+                  </div>
+                  <p style={cardTextStyle}><strong>Description:</strong> {launch.description}</p>
+                  <p style={cardTextStyle}><strong>Total Tokens:</strong> {launch.totalTokens}</p>
+                  <p style={cardTextStyle}><strong>Tokens Available:</strong> {launch.tokensAvailable}</p>
+                  <p style={cardTextStyle}><strong>Tokens Claimed:</strong> {launch.tokensClaimed}</p>
+                  <p style={cardTextStyle}><strong>Participants:</strong> {launch.participants}</p>
+                  <p style={cardTextStyle}><strong>Deadline:</strong> {launch.deadline}</p>
+                  <p style={cardTextStyle}><strong>Cost Per Token:</strong> {launch.costPerToken} ETH</p>
+                  <div style={progressBarContainerStyle}>
+                    <div style={progressBarStyle(percentageClaimed)}>
+                      {`${percentageClaimed.toFixed(2)}% Claimed`}
+                    </div>
+                  </div>
+                  <p style={{ marginTop: '10px' }}>
+                    <span
+                      style={contractLinkStyle}
+                      onClick={() => handleContractLinkClick(launch.contractAddress)}
+                    >
+                      View Contract Address
+                    </span>
+                  </p>
+                  <button style={buttonStyle}>Purchase Token</button>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      </div>
     </>
   );
 }
