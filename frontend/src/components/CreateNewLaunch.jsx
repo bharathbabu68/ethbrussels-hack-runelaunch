@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import NavBar from './NavBar';
-const ethers = require("ethers");
+import { ethers } from 'ethers';
+const { abi } = require("../abi");
 
-function CreateNewLaunch() {
+const CreateNewLaunch = () => {
   const [tokenName, setTokenName] = useState('');
   const [tokenSymbol, setTokenSymbol] = useState('');
   const [description, setDescription] = useState('');
   const [totalTokens, setTotalTokens] = useState(0);
   const [deadline, setDeadline] = useState('');
   const [costPerToken, setCostPerToken] = useState(0);
-  const [contractAddress, setContractAddress] = useState('');
+  const [tokenContractAddress, setTokenContractAddress] = useState('');
+  const [sellerAddress, setSellerAddress] = useState('');
   const [transactionHash, setTransactionHash] = useState('');
 
   const containerStyle = {
@@ -78,26 +80,23 @@ function CreateNewLaunch() {
 
   const handleSubmit = async () => {
     try {
-      // Connect to Metamask
+      // Connect to MetaMask
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send('eth_requestAccounts', []);
 
       const signer = provider.getSigner();
-      const contractAbi = [
-        'function createNewLaunch(string name, string symbol, string description, uint256 totalTokens, string deadline, uint256 costPerToken) public payable',
-      ];
 
-      const contractAddress = ''; 
-      const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+      const contract = new ethers.Contract(process.env.REACT_APP_LAUNCHPAD_CONTRACT_ADDRESS, abi, signer);
 
-      // Send transaction
-      const transaction = await contract.createNewLaunch(
+      const transaction = await contract.createLaunch(
         tokenName,
         tokenSymbol,
         description,
         totalTokens,
         deadline,
-        ethers.utils.parseEther(costPerToken.toString())
+        costPerToken,
+        tokenContractAddress,
+        sellerAddress
       );
 
       // Wait for transaction to be mined
@@ -116,7 +115,8 @@ function CreateNewLaunch() {
       setTotalTokens(0);
       setDeadline('');
       setCostPerToken(0);
-      setContractAddress('');
+      setTokenContractAddress('');
+      setSellerAddress('');
 
     } catch (error) {
       console.error('Error creating new launch:', error);
@@ -173,9 +173,9 @@ function CreateNewLaunch() {
               />
             </div>
             <div style={formRowStyle}>
-              <label htmlFor="deadline">Deadline:</label>
+              <label htmlFor="deadline">Days to Deadline:</label>
               <input
-                type="date"
+                type="number"
                 id="deadline"
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
@@ -183,7 +183,7 @@ function CreateNewLaunch() {
               />
             </div>
             <div style={formRowStyle}>
-              <label htmlFor="costPerToken">Cost Per Token (in RBTC):</label>
+              <label htmlFor="costPerToken">Cost Per Token (in wei):</label>
               <input
                 type="number"
                 id="costPerToken"
@@ -193,12 +193,22 @@ function CreateNewLaunch() {
               />
             </div>
             <div style={formRowStyle}>
-              <label htmlFor="contractAddress">Contract Address:</label>
+              <label htmlFor="tokenContractAddress">Token Contract Address:</label>
               <input
                 type="text"
-                id="contractAddress"
-                value={contractAddress}
-                onChange={(e) => setContractAddress(e.target.value)}
+                id="tokenContractAddress"
+                value={tokenContractAddress}
+                onChange={(e) => setTokenContractAddress(e.target.value)}
+                style={inputStyle}
+              />
+            </div>
+            <div style={formRowStyle}>
+              <label htmlFor="sellerAddress">Seller Address:</label>
+              <input
+                type="text"
+                id="sellerAddress"
+                value={sellerAddress}
+                onChange={(e) => setSellerAddress(e.target.value)}
                 style={inputStyle}
               />
             </div>
@@ -210,6 +220,6 @@ function CreateNewLaunch() {
       </div>
     </>
   );
-}
+};
 
 export default CreateNewLaunch;
