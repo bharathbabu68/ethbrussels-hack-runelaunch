@@ -107,6 +107,7 @@ const CreateNewLaunch = () => {
 
       // Alert with the transaction hash or update UI as needed
       alert(`Transaction Hash: ${transaction.hash}`);
+      window.location.reload()
 
       // Optionally clear form inputs or show success message
       setTokenName('');

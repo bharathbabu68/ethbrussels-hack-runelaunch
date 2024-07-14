@@ -81,6 +81,8 @@ function Launches() {
       setTransactionHash(transaction.hash);
       alert(`Transaction Hash: ${transaction.hash}`);
       setIsModalOpen(false);
+      window.location.reload()
+
     } catch (error) {
       console.error('Error processing transaction:', error);
       // Handle error, display message to user, etc.
