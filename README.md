@@ -1,32 +1,28 @@
-# RuneLaunch Platform
-RuneLaunch is a decentralized platform that facilitates the creation, investment, and redemption of runes (tokens) through NFTs. Users can seamlessly create runes, list them on a launchpad for investment, and claim their corresponding NFTs. These NFTs can then be redeemed to obtain the actual underlying tokens or runes that users have invested in.
+# RuneLaunch - ETHGlobal Brussels
+RuneLaunch is a decentralized platform built on the Rootstock network, facilitating the initial launch and decentralized exchange (DEX) offering of custom runes. Runes can be created on Bitcoin using Rootstock and bridged to Rootstock for trading on RuneLaunch. This platform utilizes smart contracts to ensure transparency and trust in rune launches, allowing creators to set fixed prices and issue ERC-721 NFTs to early investors.
 
+# Architecture
 ![](https://github.com/bharathbabu68/ethbrussels-hack-runelaunch/blob/main/EthBrussels.jpg)
 
 ## Features
-1. Create Runes
-Seamless Token Creation: Easily create new runes with specified details such as token name, symbol, description, total tokens allocated, deadline, cost per token in rBTC, and contract address.
-Token Standard Support: Supports various token standards (e.g., ERC-20, ERC-721) based on Ethereum blockchain.
-2. Launchpad for Investment
-Runes Listing: List created runes on the launchpad for investment by other users.
-Investment Opportunities: Users can invest in listed runes using rBTC (wrapped BTC) directly from their wallets through MetaMask or other compatible wallets.
-3. NFTs for Runes
-NFT Generation: Automatically generate NFTs (non-fungible tokens) for each rune listed on the launchpad.
-Redemption Mechanism: Each NFT represents ownership of a specific amount of runes. Holders can redeem these NFTs to claim the actual underlying tokens or runes they have invested in.
-4. Seamless Interaction with MetaMask
-MetaMask Integration: Connects seamlessly with MetaMask for wallet management and transaction processing.
-Transaction Execution: Allows users to trigger on-chain transactions directly from their wallets to interact with runes and NFTs.
-Getting Started
-To get started with RuneLaunch, follow these steps:
+- Create Rune Launches: Set up launch offerings for custom runes with fixed prices.
+- Issue ERC-721 NFTs: Each early investor receives a unique NFT representing their contribution.
+-  Claim Runes: Investors can claim their runes by burning the NFT after the launch period.
+- Trade NFTs: ERC-721 NFTs can be traded before the launch period ends.
+- Cross-Chain Compatibility: Facilitates rune creation on Bitcoin and migration to Rootstock.
 
 ## Contract Addresses on Rootstock
 - Launchpad Contract: 0x91fb4E9c919d98108F544CCC9bC9e2ceFcfC6443
 
-## Prerequisites
+## Getting Started
+To get started with RuneLaunch, follow these steps:
+
+
+### Prerequisites
 - Ensure you have MetaMask or another compatible Ethereum wallet installed.
 - Have access to an Ethereum-compatible browser (e.g., Chrome with MetaMask extension).
 
-## Installation
+### Installation
 Clone the repository:
 
 ``` bash
