@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
-const ethers = require("ethers")
+import { ethers } from 'ethers';
+const { abi } = require("../abi");
 
 function Launches() {
   const [launches, setLaunches] = useState([]);
@@ -10,210 +11,34 @@ function Launches() {
   const [transactionHash, setTransactionHash] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = [
-        {
-          name: 'Token1',
-          symbol: 'TKN1',
-          description: 'Description for Token1',
-          tokensAvailable: 100000,
-          tokensClaimed: 50000,
-          totalTokens: 150000,
-          deadline: '2024-12-31',
-          costPerToken: 0.01,
-          participants: 1200,
-          contractAddress: '0xb4711efc038b485b1a909b20a9cb02024b6ee402', // Example contract address
-        },
-        {
-          name: 'Token2',
-          symbol: 'TKN2',
-          description: 'Description for Token2',
-          tokensAvailable: 500000,
-          tokensClaimed: 250000,
-          totalTokens: 1000000,
-          deadline: '2024-11-30',
-          costPerToken: 0.05,
-          participants: 850,
-          contractAddress: '0xb4711efc038b485b1a909b20a9cb02024b6ee403', // Example contract address
-        },
-        {
-          name: 'Token3',
-          symbol: 'TKN3',
-          description: 'Description for Token3',
-          tokensAvailable: 750000,
-          tokensClaimed: 400000,
-          totalTokens: 1150000,
-          deadline: '2024-10-15',
-          costPerToken: 0.03,
-          participants: 1100,
-          contractAddress: '0xb4711efc038b485b1a909b20a9cb02024b6ee404', // Example contract address
-        },
-        {
-          name: 'Token4',
-          symbol: 'TKN4',
-          description: 'Description for Token4',
-          tokensAvailable: 750000,
-          tokensClaimed: 400000,
-          totalTokens: 1150000,
-          deadline: '2024-10-15',
-          costPerToken: 0.03,
-          participants: 1100,
-          contractAddress: '0xb4711efc038b485b1a909b20a9cb02024b6ee405', // Example contract address
-        },
-      ];
-      setLaunches(data);
+    const fetchActiveLaunches = async () => {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const contract = new ethers.Contract(process.env.REACT_APP_LAUNCHPAD_CONTRACT_ADDRESS, abi, provider);
+        
+        const activeLaunches = await contract.getActiveLaunches();
+        const formattedLaunches = activeLaunches.map(launch => ({
+          id: launch.id.toString(),
+          name: launch.tokenName,
+          symbol: launch.tokenSymbol,
+          description: launch.description,
+          tokensAvailable: (launch.totalTokens.sub(launch.tokensSold)).toString(),
+          tokensClaimed: launch.tokensSold.toString(),
+          totalTokens: launch.totalTokens.toString(),
+          deadline: new Date(launch.deadline.toNumber() * 1000).toLocaleDateString(),
+          costPerToken: ethers.utils.formatEther(launch.costPerToken),
+          participants: launch.participantCount.toString(),
+          contractAddress: launch.tokenContractAddress,
+        }));
+
+        setLaunches(formattedLaunches);
+      } catch (error) {
+        console.error('Error fetching active launches:', error);
+      }
     };
 
-    fetchData();
+    fetchActiveLaunches();
   }, []);
-
-  const containerStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    backgroundColor: 'black',
-    color: 'white',
-    minHeight: '100vh',
-    padding: '20px',
-  };
-
-  const sectionStyle = {
-    maxWidth: '1200px', // Increased maxWidth for wider display
-    width: '100%',
-    marginTop: '20px',
-    marginBottom: '30px',
-  };
-
-  const titleContainerStyle = {
-    textAlign: 'left',
-    marginBottom: '5px',
-  };
-
-  const titleStyle = {
-    fontSize: '48px',
-    fontWeight: 'bold',
-    color: 'black',
-    backgroundColor: 'orangered',
-    display: 'inline-block',
-    padding: '5px 5px',
-  };
-
-  const gridContainerStyle = {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', // Adjusted for three cards per row
-    gap: '20px',
-    marginTop: '20px',
-  };
-
-  const cardStyle = {
-    border: '2px solid white',
-    borderRadius: '20px',
-    padding: '20px',
-    backgroundColor: 'black',
-    color: 'white',
-    textAlign: 'left',
-  };
-
-  const cardHeaderStyle = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '10px',
-  };
-
-  const cardTitleStyle = (backgroundColor) => ({
-    fontSize: '24px',
-    padding: '5px 10px',
-    display: 'inline-block',
-    marginBottom: '10px',
-    color: 'white',
-    backgroundColor: backgroundColor,
-  });
-
-  const cardSymbolStyle = {
-    fontSize: '18px',
-    padding: '5px 10px',
-    color: 'white',
-    backgroundColor: 'gray',
-    borderRadius: '5px',
-  };
-
-  const cardTextStyle = {
-    margin: '5px 0',
-  };
-
-  const contractLinkStyle = {
-    fontSize: '14px',
-    color: 'white',
-    textDecoration: 'underline',
-    cursor: 'pointer',
-  };
-
-  const progressBarContainerStyle = {
-    backgroundColor: 'white',
-    borderRadius: '10px',
-    overflow: 'hidden',
-    height: '25px',
-    marginTop: '10px',
-  };
-
-  const progressBarStyle = (percentage) => ({
-    width: `${percentage}%`,
-    backgroundColor: 'limegreen',
-    height: '100%',
-    textAlign: 'center',
-    color: 'black',
-    lineHeight: '25px', // Center the text vertically
-  });
-
-  const buttonStyle = {
-    fontSize: '16px',
-    backgroundColor: 'black',
-    color: 'white',
-    padding: '10px 20px',
-    border: '2px solid white',
-    cursor: 'pointer',
-    marginTop: '10px',
-  };
-
-  const CreateButtonStyle = {
-    fontSize: '20px',
-    backgroundColor: '#9E76FF',
-    color: 'white',
-    padding: '10px 20px',
-    border: '2px solid #9E76FF',
-    cursor: 'pointer',
-    marginTop: '10px',
-    marginLeft: '80%',
-  };
-
-  const modalStyle = {
-    display: 'block',
-    position: 'fixed',
-    zIndex: '1',
-    left: '0',
-    top: '0',
-    width: '100%',
-    height: '100%',
-    overflow: 'auto',
-    backgroundColor: 'rgba(0,0,0,0.4)',
-  };
-
-  const modalContentStyle = {
-    backgroundColor: '#fefefe',
-    margin: '15% auto',
-    padding: '20px',
-    border: '1px solid #888',
-    width: '30%', // Adjusted width to make the modal smaller
-  };
-
-  const modalCloseStyle = {
-    color: '#aaa',
-    float: 'right',
-    fontSize: '28px',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-  };
 
   const handleContractLinkClick = (contractAddress) => {
     const blockExplorerUrl = `https://explorer.testnet.rootstock.io/address/${contractAddress}`;
@@ -237,35 +62,23 @@ function Launches() {
 
   const handleConfirmPurchase = async () => {
     try {
-      // Connect to Metamask
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send('eth_requestAccounts', []);
 
       const signer = provider.getSigner();
-      const contractAddress = selectedToken.contractAddress;
-      const contractAbi = ['function purchaseTokens(uint256 amount) public payable'];
+      const contract = new ethers.Contract(process.env.REACT_APP_LAUNCHPAD_CONTRACT_ADDRESS, abi, signer);
 
-      // Instantiate the contract
-      const contract = new ethers.Contract(contractAddress, contractAbi, signer);
+      const cost = ethers.utils.parseEther((tokensToPurchase * parseFloat(selectedToken.costPerToken)).toString());
 
-      // Calculate cost
-      const cost = ethers.utils.parseEther((tokensToPurchase * selectedToken.costPerToken).toString());
 
-      // Send transaction
-      const transaction = await contract.purchaseTokens(tokensToPurchase, {
+      const transaction = await contract.purchaseToken(selectedToken.id, tokensToPurchase, {
         value: cost,
       });
 
-      // Wait for transaction to be mined
       await transaction.wait();
 
-      // Transaction hash received
       setTransactionHash(transaction.hash);
-
-      // Alert with the transaction hash
       alert(`Transaction Hash: ${transaction.hash}`);
-
-      // Close the modal
       setIsModalOpen(false);
     } catch (error) {
       console.error('Error processing transaction:', error);
@@ -286,7 +99,7 @@ function Launches() {
           </button>
           <div style={gridContainerStyle}>
             {launches.map((launch, index) => {
-              const percentageClaimed = (launch.tokensClaimed / launch.totalTokens) * 100;
+              const percentageClaimed = (parseFloat(launch.tokensClaimed) / parseFloat(launch.totalTokens)) * 100;
               return (
                 <div key={index} style={cardStyle}>
                   <div style={cardHeaderStyle}>
@@ -323,7 +136,6 @@ function Launches() {
         </section>
       </div>
 
-      {/* Modal */}
       {isModalOpen && (
         <div style={modalStyle}>
           <div style={modalContentStyle}>
@@ -339,7 +151,7 @@ function Launches() {
               onChange={(e) => setTokensToPurchase(parseInt(e.target.value))}
               style={{ marginBottom: '10px', padding: '5px' }}
             />
-            <p>Estimated Cost: {tokensToPurchase * selectedToken.costPerToken} ETH</p>
+            <p>Estimated Cost: {tokensToPurchase * parseFloat(selectedToken.costPerToken)} ETH</p>
             <button style={buttonStyle} onClick={handleConfirmPurchase}>
               Confirm Purchase
             </button>
@@ -351,3 +163,155 @@ function Launches() {
 }
 
 export default Launches;
+
+const containerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  backgroundColor: 'black',
+  color: 'white',
+  minHeight: '100vh',
+  padding: '20px',
+};
+
+const sectionStyle = {
+  maxWidth: '1200px',
+  width: '100%',
+  marginTop: '20px',
+  marginBottom: '30px',
+};
+
+const titleContainerStyle = {
+  textAlign: 'left',
+  marginBottom: '5px',
+};
+
+const titleStyle = {
+  fontSize: '48px',
+  fontWeight: 'bold',
+  color: 'black',
+  backgroundColor: 'orangered',
+  display: 'inline-block',
+  padding: '5px 5px',
+};
+
+const gridContainerStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+  gap: '20px',
+  marginTop: '20px',
+};
+
+const cardStyle = {
+  border: '2px solid white',
+  borderRadius: '20px',
+  padding: '20px',
+  backgroundColor: 'black',
+  color: 'white',
+  textAlign: 'left',
+};
+
+const cardHeaderStyle = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: '10px',
+};
+
+const cardTitleStyle = (backgroundColor) => ({
+  fontSize: '24px',
+  padding: '5px 10px',
+  display: 'inline-block',
+  marginBottom: '10px',
+  color: 'white',
+  backgroundColor: backgroundColor,
+});
+
+const cardSymbolStyle = {
+  fontSize: '18px',
+  padding: '5px 10px',
+  color: 'white',
+  backgroundColor: 'gray',
+  borderRadius: '5px',
+};
+
+const cardTextStyle = {
+  margin: '5px 0',
+};
+
+const contractLinkStyle = {
+  fontSize: '14px',
+  color: 'white',
+  textDecoration: 'underline',
+  cursor: 'pointer',
+};
+
+const progressBarContainerStyle = {
+  backgroundColor: 'white',
+  borderRadius: '10px',
+  overflow: 'hidden',
+  height: '25px',
+  marginTop: '10px',
+};
+
+const progressBarStyle = (percentage) => ({
+  width: `${percentage}%`,
+  backgroundColor: 'limegreen',
+  height: '100%',
+  textAlign: 'center',
+  color: 'black',
+  lineHeight: '25px',
+});
+
+const buttonStyle = {
+  fontSize: '16px',
+  padding: '10px 20px',
+  color: 'white',
+  backgroundColor: 'orangered',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer',
+  marginTop: '10px',
+};
+
+const modalStyle = {
+  position: 'fixed',
+  zIndex: 1,
+  left: 0,
+  top: 0,
+  width: '100%',
+  height: '100%',
+  overflow: 'auto',
+  backgroundColor: 'rgba(0,0,0,0.4)',
+};
+
+const modalContentStyle = {
+  backgroundColor: 'black',
+  color: 'white',
+  margin: '15% auto',
+  padding: '20px',
+  border: '1px solid #888',
+  width: '80%',
+  maxWidth: '500px',
+  textAlign: 'center',
+  borderRadius: '10px',
+};
+
+const modalCloseStyle = {
+  color: '#aaa',
+  float: 'right',
+  fontSize: '28px',
+  fontWeight: 'bold',
+  cursor: 'pointer',
+};
+
+const CreateButtonStyle = {
+  fontSize: '16px',
+  padding: '10px 20px',
+  color: 'black',
+  backgroundColor: 'limegreen',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer',
+  marginTop: '10px',
+};

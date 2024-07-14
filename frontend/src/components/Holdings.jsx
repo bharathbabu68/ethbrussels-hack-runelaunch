@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from './NavBar';
-const ethers = require("ethers");
+import { ethers } from 'ethers';
+const { abi } = require("../abi");
 
 function Holdings() {
   const [nfts, setNFTs] = useState([]);
   const [walletAddress, setWalletAddress] = useState('');
 
   useEffect(() => {
-    // Simulated data for demonstration
     const fetchData = async () => {
       try {
         // Connect to MetaMask and get the current wallet address
@@ -17,38 +17,41 @@ function Holdings() {
         const address = await signer.getAddress();
         setWalletAddress(address);
 
-        // Simulated NFT data
-        const data = [
-          {
-            tokenId: 1,
-            tokenName: 'CryptoKitty #123',
-            tokenSymbol: 'CK123',
-            amount: 1,
-            price: '0.1',
-            imageUrl: 'https://via.placeholder.com/300', // Placeholder image URL
-            contractAddress: '0xb4711efc038b485b1a909b20a9cb02024b6ee406', // Example contract address
-          },
-          {
-            tokenId: 2,
-            tokenName: 'Etheremon #456',
-            tokenSymbol: 'EM456',
-            amount: 3,
-            price: '0.05',
-            imageUrl: 'https://via.placeholder.com/300', // Placeholder image URL
-            contractAddress: '0xb4711efc038b485b1a909b20a9cb02024b6ee406', // Example contract address
-          },
-          {
-            tokenId: 3,
-            tokenName: 'Axie Infinity #789',
-            tokenSymbol: 'AX789',
-            amount: 2,
-            price: '0.03',
-            imageUrl: 'https://via.placeholder.com/300', // Placeholder image URL
-            contractAddress: '0xb4711efc038b485b1a909b20a9cb02024b6ee406', // Example contract address
-          },
-        ];
+        // Instantiate the BasicLaunchpad contract
+        const contract = new ethers.Contract(process.env.REACT_APP_LAUNCHPAD_CONTRACT_ADDRESS, abi, provider);
 
-        setNFTs(data);
+        // Call the contract's getOwnedTokens function
+        const result = await contract.getOwnedTokens(address);
+        const tokenIds = result[0];
+        const tokenContractAddresses = result[1];
+        const amounts = result[2];
+        const pricesBoughtFor = result[3];
+
+        // Fetch ERC20 token information for each NFT
+        const nftDataPromises = tokenContractAddresses.map(async (contractAddress, index) => {
+          // Instantiate the ERC20 contract
+          const erc20Contract = new ethers.Contract(contractAddress, abi, provider);
+          const tokenNamePromise = erc20Contract.name();
+          const tokenSymbolPromise = erc20Contract.symbol();
+          const [tokenName, tokenSymbol] = await Promise.all([tokenNamePromise, tokenSymbolPromise]);
+
+          return {
+            tokenId: tokenIds[index].toNumber(),
+            tokenName: `NFT #${tokenIds[index]}`,
+            tokenSymbol: `NFT${tokenIds[index]}`,
+            amount: amounts[index].toNumber(),
+            price: ethers.utils.formatEther(pricesBoughtFor[index]), // Assuming pricesBoughtFor is in Ether (ETH)
+            imageUrl: 'https://via.placeholder.com/100', // Placeholder image URL
+            contractAddress: contractAddress,
+            erc20TokenName: tokenName,
+            erc20TokenSymbol: tokenSymbol,
+          };
+        });
+
+        // Resolve all promises
+        const nftData = await Promise.all(nftDataPromises);
+
+        setNFTs(nftData);
       } catch (error) {
         console.error('Error fetching NFTs:', error);
         // Handle error, display message to user, etc.
@@ -181,10 +184,12 @@ function Holdings() {
                   <h3 style={cardTitleStyle('blue')}>{nft.tokenName}</h3>
                   <span style={{ fontSize: '18px', color: 'white', marginLeft: '10px' }}>{nft.tokenSymbol}</span>
                 </div>
-                <img src={nft.imageUrl} alt="NFT Image" style={{ width: '100%', marginBottom: '10px', borderRadius: '10px' }} />
                 <p style={cardTextStyle}><strong>Token ID:</strong> {nft.tokenId}</p>
                 <p style={cardTextStyle}><strong>Amount:</strong> {nft.amount}</p>
                 <p style={cardTextStyle}><strong>Price Bought:</strong> {nft.price} RBTC</p>
+                <p style={cardTextStyle}><strong>Token Contract:</strong> {nft.contractAddress}</p>
+                <p style={cardTextStyle}><strong>ERC20 Token Name:</strong> {nft.erc20TokenName}</p>
+                <p style={cardTextStyle}><strong>ERC20 Token Symbol:</strong> {nft.erc20TokenSymbol}</p>
                 <button style={redeemButtonStyle} onClick={() => handleRedeemNFT(nft.tokenId, nft.contractAddress)}>
                   Redeem NFT
                 </button>
