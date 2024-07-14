@@ -19,6 +19,9 @@ Transaction Execution: Allows users to trigger on-chain transactions directly fr
 Getting Started
 To get started with RuneLaunch, follow these steps:
 
+## Contract Addresses on Rootstock
+- Launchpad Contract: 0x91fb4E9c919d98108F544CCC9bC9e2ceFcfC6443
+
 ## Prerequisites
 - Ensure you have MetaMask or another compatible Ethereum wallet installed.
 - Have access to an Ethereum-compatible browser (e.g., Chrome with MetaMask extension).
