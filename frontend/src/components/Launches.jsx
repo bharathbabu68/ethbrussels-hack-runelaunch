@@ -30,8 +30,9 @@ function Launches() {
           participants: launch.participantCount.toString(),
           contractAddress: launch.tokenContractAddress,
         }));
+        const formattedLaunchesReverse = formattedLaunches.reverse()
 
-        setLaunches(formattedLaunches);
+        setLaunches(formattedLaunchesReverse);
       } catch (error) {
         console.error('Error fetching active launches:', error);
       }
