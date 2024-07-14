@@ -79,7 +79,7 @@ function CreateNewLaunch() {
   const handleSubmit = async () => {
     try {
       // Connect to Metamask
-      const provider = new ethers.BrowserProvider(window.ethereum);
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send('eth_requestAccounts', []);
 
       const signer = provider.getSigner();
