@@ -1,6 +1,8 @@
 # RuneLaunch Platform
 RuneLaunch is a decentralized platform that facilitates the creation, investment, and redemption of runes (tokens) through NFTs. Users can seamlessly create runes, list them on a launchpad for investment, and claim their corresponding NFTs. These NFTs can then be redeemed to obtain the actual underlying tokens or runes that users have invested in.
 
+![](https://github.com/bharathbabu68/ethbrussels-hack-runelaunch/blob/main/EthBrussels.jpg)
+
 ## Features
 1. Create Runes
 Seamless Token Creation: Easily create new runes with specified details such as token name, symbol, description, total tokens allocated, deadline, cost per token in rBTC, and contract address.
